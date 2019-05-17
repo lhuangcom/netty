@@ -1,5 +1,6 @@
 package com.lhuang.blog.chatroom.api.handler;
 
+import com.lhuang.blog.chatroom.api.LoginUtil;
 import com.lhuang.blog.chatroom.api.protocol.packet.LoginRequestPacket;
 import com.lhuang.blog.chatroom.api.protocol.packet.LoginResponsePacket;
 import io.netty.channel.ChannelHandlerContext;
@@ -26,6 +27,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         if (valid(loginRequestPacket)) {
 
             loginResponsePacket.setSuccess(true);
+            LoginUtil.markLogin(channelHandlerContext.channel());
             log.info("客户端登录成功");
             // 校验成功
         } else {
