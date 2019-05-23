@@ -1,10 +1,7 @@
-package com.lhuang.blog.chatroom.api.handler;
+package com.lhuang.blog.chatroom.api.handler.server;
 
-import com.lhuang.blog.chatroom.api.protocol.packet.LoginResponsePacket;
-import com.lhuang.blog.chatroom.api.protocol.packet.MessageRequestPacket;
-import com.lhuang.blog.chatroom.api.protocol.packet.MessageResponsePacket;
-import com.lhuang.blog.chatroom.api.protocol.packet.PacketCode;
-import io.netty.buffer.ByteBuf;
+import com.lhuang.blog.chatroom.api.protocol.packet.request.MessageRequestPacket;
+import com.lhuang.blog.chatroom.api.protocol.packet.response.MessageResponsePacket;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;

@@ -1,11 +1,9 @@
-package com.lhuang.blog.chatroom.api.handler;
+package com.lhuang.blog.chatroom.api.handler.client;
 
-import com.lhuang.blog.chatroom.api.protocol.packet.MessageResponsePacket;
+import com.lhuang.blog.chatroom.api.protocol.packet.response.MessageResponsePacket;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Date;
 
 /**
  * @author LHuang
@@ -15,7 +13,9 @@ import java.util.Date;
 public class MessageResponseHandler extends SimpleChannelInboundHandler<MessageResponsePacket> {
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageResponsePacket messageResponsePacket)  {
-        log.info(new Date() + ": 收到服务端的消息: " + messageResponsePacket.getMessage());
+        String fromUserId = messageResponsePacket.getFromUserID();
+        String fromUserName = messageResponsePacket.getFromUserName();
+        log.info(fromUserId + " : " + fromUserName + " -> " + messageResponsePacket.getMessage());
 
     }
 }

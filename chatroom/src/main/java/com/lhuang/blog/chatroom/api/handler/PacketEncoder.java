@@ -1,7 +1,7 @@
 package com.lhuang.blog.chatroom.api.handler;
 
 import com.lhuang.blog.chatroom.api.protocol.packet.Packet;
-import com.lhuang.blog.chatroom.api.protocol.packet.PacketCode;
+import com.lhuang.blog.chatroom.api.factory.PacketCode;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;

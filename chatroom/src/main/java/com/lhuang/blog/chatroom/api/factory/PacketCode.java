@@ -1,14 +1,16 @@
-package com.lhuang.blog.chatroom.api.protocol.packet;
+package com.lhuang.blog.chatroom.api.factory;
 
+import com.lhuang.blog.chatroom.api.protocol.packet.Packet;
+import com.lhuang.blog.chatroom.api.protocol.packet.request.*;
+import com.lhuang.blog.chatroom.api.protocol.packet.response.*;
 import com.lhuang.blog.chatroom.api.protocol.serialize.JSONSerializer;
 import com.lhuang.blog.chatroom.api.protocol.serialize.Serializer;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.lhuang.blog.chatroom.api.protocol.Command.*;
+import static com.lhuang.blog.chatroom.api.command.Command.*;
 
 
 public class PacketCode {
@@ -22,11 +24,21 @@ public class PacketCode {
 
     private PacketCode(){
         packetTypeMap = new HashMap<>();
-        packetTypeMap.put(LOGIN_REQUEST, com.lhuang.blog.chatroom.api.protocol.packet.LoginRequestPacket.class);
-        packetTypeMap.put(LOGIN_RESPONSE, com.lhuang.blog.chatroom.api.protocol.packet.LoginResponsePacket.class);
-        packetTypeMap.put(MESSAGE_REQUEST, com.lhuang.blog.chatroom.api.protocol.packet.MessageRequestPacket.class);
-        packetTypeMap.put(MESSAGE_RESPONSE, com.lhuang.blog.chatroom.api.protocol.packet.MessageResponsePacket.class);
-
+        packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
+        packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
+        packetTypeMap.put(MESSAGE_FORWARD, MessageForwardPacket.class);
+        packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+        packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
+        packetTypeMap.put(LOGOUT_REQUEST, LogoutRequestPacket.class);
+        packetTypeMap.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
+        packetTypeMap.put(JOIN_GROUP_REQUEST, JoinGroupRequestPacket.class);
+        packetTypeMap.put(JOIN_GROUP_RESPOMSE,JoinGroupResponsePacket.class);
+        packetTypeMap.put(LIST_GROUP_MEMBERS_REQUEST,ListGroupMembersRequestPacket.class);
+        packetTypeMap.put(LIST_GROUP_MEMBERS_RESPONSE,ListGroupMembersResponsePacket.class);
+        packetTypeMap.put(QUIT_GROUP_REQUEST,QuitGroupRequestPacket.class);
+        packetTypeMap.put(QUIT_GROUP_RESPONSE,QuitGroupResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
@@ -42,7 +54,7 @@ public class PacketCode {
         return PackCodeInner.packetCodeInstance;
     }
 
-    public ByteBuf encode(ByteBuf byteBuf,Packet packet){
+    public ByteBuf encode(ByteBuf byteBuf, Packet packet){
 
         //序列化Java对象
         byte[] bytes = Serializer.DEFAULT.serializer(packet);

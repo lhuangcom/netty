@@ -1,8 +1,10 @@
 package com.lhuang.blog.chatroom;
 
-import com.lhuang.blog.chatroom.api.LoginUtil;
+import com.lhuang.blog.chatroom.api.command.LoginConsoleCommand;
+import com.lhuang.blog.chatroom.api.factory.ConsoleCommandManager;
 import com.lhuang.blog.chatroom.api.handler.*;
-import com.lhuang.blog.chatroom.api.protocol.packet.MessageRequestPacket;
+import com.lhuang.blog.chatroom.api.handler.client.*;
+import com.lhuang.blog.chatroom.api.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -39,6 +41,11 @@ public class NettyClient {
                         nioSocketChannel.pipeline().addLast(new PacketDecoder());
                         nioSocketChannel.pipeline().addLast(new LoginResponseHandler());
                         nioSocketChannel.pipeline().addLast(new MessageResponseHandler());
+                        nioSocketChannel.pipeline().addLast(new CreateGroupResponseHandler());
+                        nioSocketChannel.pipeline().addLast(new LogoutResponseHandler());
+                        nioSocketChannel.pipeline().addLast(new JoinGroupResponseHandler());
+                        nioSocketChannel.pipeline().addLast(new QuitGroupResponseHandler());
+                        nioSocketChannel.pipeline().addLast(new ListGroupMembersResponseHandler());
                         nioSocketChannel.pipeline().addLast(new PacketEncoder());
                     }
                 });
@@ -76,27 +83,22 @@ public class NettyClient {
     }
 
     private static  void  startConsoleThread(Channel channel){
-        new Thread(()->{
-            while (!Thread.interrupted()){
-             //   if (LoginUtil.hasLogin(channel)){
-                    log.info("输入消息发送至服务端:");
-                    Scanner scanner = new Scanner(System.in);
 
-                    String line = scanner.nextLine();
+        ConsoleCommandManager consoleCommandManager = new ConsoleCommandManager();
+        LoginConsoleCommand loginConsoleCommand = new LoginConsoleCommand();
 
-                    MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
 
-                    messageRequestPacket.setMessage(line);
+        Scanner scanner = new Scanner(System.in);
 
-                    channel.writeAndFlush(messageRequestPacket);
-
+        new Thread(() -> {
+            while (!Thread.interrupted()) {
+                if (!LoginUtil.hasLogin(channel) ) {
+                    loginConsoleCommand.exec(scanner,channel);
+                } else {
+                    consoleCommandManager.exec(scanner,channel);
                 }
-
-         //   }
+            }
         }).start();
-
     }
-
-
 
 }

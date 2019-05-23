@@ -1,11 +1,16 @@
-package com.lhuang.blog.chatroom.api.handler;
+package com.lhuang.blog.chatroom.api.handler.server;
 
-import com.lhuang.blog.chatroom.api.LoginUtil;
-import com.lhuang.blog.chatroom.api.protocol.packet.LoginRequestPacket;
-import com.lhuang.blog.chatroom.api.protocol.packet.LoginResponsePacket;
+import com.lhuang.blog.chatroom.api.pojo.Session;
+import com.lhuang.blog.chatroom.api.util.IDUtil;
+import com.lhuang.blog.chatroom.api.util.LoginUtil;
+import com.lhuang.blog.chatroom.api.protocol.packet.request.LoginRequestPacket;
+import com.lhuang.blog.chatroom.api.protocol.packet.response.LoginResponsePacket;
+import com.lhuang.blog.chatroom.api.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Date;
 
 /**
  * @author LHuang
@@ -13,6 +18,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+
+        SessionUtil.unBindSession(ctx.channel());
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, LoginRequestPacket loginRequestPacket) {
 
@@ -26,14 +37,31 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         // 登录校验
         if (valid(loginRequestPacket)) {
 
-            loginResponsePacket.setSuccess(true);
-            LoginUtil.markLogin(channelHandlerContext.channel());
-            log.info("客户端登录成功");
             // 校验成功
+            LoginUtil.markLogin(channelHandlerContext.channel());
+
+            String userID = IDUtil.randomID();
+
+            Session session = new Session();
+            session.setUserID(userID);
+            session.setUserName(loginRequestPacket.getUsername());
+
+            SessionUtil.bindSession(session,channelHandlerContext.channel());
+
+            loginResponsePacket.setSuccess(true);
+            loginResponsePacket.setUserID(userID);
+            loginResponsePacket.setUsername(loginRequestPacket.getUsername());
+
+            log.info("客户端登录成功");
+
+
         } else {
+
             // 校验失败
             loginResponsePacket.setSuccess(false);
             loginResponsePacket.setReason("账号密码校验失败");
+
+            log.info(new Date() +"登录失败");
         }
 
         channelHandlerContext.channel().writeAndFlush(loginResponsePacket);
@@ -43,5 +71,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     private boolean valid(LoginRequestPacket loginRequestPacket) {
         return true;
     }
+
+
 
 }

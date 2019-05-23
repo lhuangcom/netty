@@ -1,5 +1,6 @@
 package com.lhuang.blog.chatroom.api.protocol;
 
+import com.lhuang.blog.chatroom.api.pojo.Session;
 import io.netty.util.AttributeKey;
 
 /**
@@ -9,4 +10,6 @@ import io.netty.util.AttributeKey;
 public interface Attributes {
 
     AttributeKey<Boolean> LOGIN = AttributeKey.newInstance("login");
+
+    AttributeKey<Session> SESSION = AttributeKey.newInstance("session");
 }

@@ -1,6 +1,6 @@
-package com.lhuang.blog.chatroom.api.handler;
+package com.lhuang.blog.chatroom.api.handler.server;
 
-import com.lhuang.blog.chatroom.api.LoginUtil;
+import com.lhuang.blog.chatroom.api.util.LoginUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
