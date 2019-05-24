@@ -1,5 +1,6 @@
 package com.lhuang.blog.chatroom.api.factory;
 
+import com.lhuang.blog.chatroom.api.protocol.packet.request.HeartBeatRequestPacket;
 import com.lhuang.blog.chatroom.api.protocol.packet.Packet;
 import com.lhuang.blog.chatroom.api.protocol.packet.request.*;
 import com.lhuang.blog.chatroom.api.protocol.packet.response.*;
@@ -39,6 +40,10 @@ public class PacketCode {
         packetTypeMap.put(LIST_GROUP_MEMBERS_RESPONSE,ListGroupMembersResponsePacket.class);
         packetTypeMap.put(QUIT_GROUP_REQUEST,QuitGroupRequestPacket.class);
         packetTypeMap.put(QUIT_GROUP_RESPONSE,QuitGroupResponsePacket.class);
+        packetTypeMap.put( GROUP_MESSAGE_REQUEST,GroupMessageRequestPacket.class);
+        packetTypeMap.put( GROUP_MESSAGE_RESPONSE,GroupMessageResponsePacket.class);
+        packetTypeMap.put(HEARTBEAT_REQUEST, HeartBeatRequestPacket.class);
+
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();

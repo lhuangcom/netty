@@ -5,6 +5,7 @@ import com.lhuang.blog.chatroom.api.protocol.packet.response.CreateGroupResponse
 import com.lhuang.blog.chatroom.api.util.IDUtil;
 import com.lhuang.blog.chatroom.api.util.SessionUtil;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -19,14 +20,17 @@ import java.util.List;
  * @since 2019/5/20
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<CreateGroupRequestPacket> {
 
+    public static final CreateGroupRequestHandler INSTANCE = new CreateGroupRequestHandler();
+
+    private CreateGroupRequestHandler() {
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, CreateGroupRequestPacket createGroupRequestPacket) {
-
         List<String> userIDs = createGroupRequestPacket.getUserIDs();
-
         List<String> userNames = new ArrayList<>();
 
         // 1. 创建一个 channel 分组
@@ -41,8 +45,6 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
             }
         }
 
-
-
         // 3. 创建群聊创建结果的响应
         String groupID = IDUtil.randomID();
         CreateGroupResponsePacket createGroupResponsePacket = new CreateGroupResponsePacket();
@@ -50,10 +52,8 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
         createGroupResponsePacket.setUserNameList(userNames);
         createGroupResponsePacket.setSuccess(true);
 
-
         // 4. 给每个客户端发送拉群通知
         channels.writeAndFlush(createGroupResponsePacket);
-
         log.info("群创建成功，id 为[" + createGroupResponsePacket.getGroupId() + "], ");
         log.info("群里面有：" + createGroupResponsePacket.getUserNameList());
 

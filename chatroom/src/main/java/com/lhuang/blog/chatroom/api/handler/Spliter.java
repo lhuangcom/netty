@@ -13,20 +13,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Spliter extends LengthFieldBasedFrameDecoder {
 
-    private static final Integer LENGTHFIELDOFFSET = 7;
+    private static final int LENGTH_FIELD_OFFSET = 7;
+    private static final int LENGTH_FIELD_LENGTH = 4;
 
-    private static final Integer LENGTHFIELDLENGTH = 4;
-
-    public Spliter(){
-        super(Integer.MAX_VALUE,LENGTHFIELDOFFSET,LENGTHFIELDLENGTH);
+    public Spliter() {
+        super(Integer.MAX_VALUE, LENGTH_FIELD_OFFSET, LENGTH_FIELD_LENGTH);
     }
-
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
 
-        if (in.getInt(in.readInt()) != PacketCode.MAGIC_NUMBER){
+        if (in.getInt(in.readerIndex()) != PacketCode.MAGIC_NUMBER){
             ctx.channel().close();
-            log.info("通道关闭");
+            return null;
 
         }
 

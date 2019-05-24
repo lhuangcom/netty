@@ -67,4 +67,25 @@ public interface Command {
      */
     Byte QUIT_GROUP_RESPONSE = 17;
 
+    /**
+     * 发送群消息请求
+     */
+    Byte GROUP_MESSAGE_REQUEST = 18;
+
+    /**
+     * 发送群消息响应
+     */
+    Byte  GROUP_MESSAGE_RESPONSE = 19;
+
+    /**
+     * 心跳检测请求
+     */
+    Byte  HEARTBEAT_REQUEST = 20;
+    /**
+     * 心跳检测响应
+     */
+    Byte HEARTBEAT_RESPONSE = 21;
+
+
+
 }

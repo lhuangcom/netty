@@ -3,6 +3,7 @@ package com.lhuang.blog.chatroom.api.handler.server;
 import com.lhuang.blog.chatroom.api.protocol.packet.request.LogoutRequestPacket;
 import com.lhuang.blog.chatroom.api.protocol.packet.response.LogoutResponsePacket;
 import com.lhuang.blog.chatroom.api.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,14 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2019/5/21
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class LogoutRequestHandler extends SimpleChannelInboundHandler<LogoutRequestPacket> {
+
+    public static final LogoutRequestHandler INSTANCE = new LogoutRequestHandler();
+
+    private LogoutRequestHandler() {
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, LogoutRequestPacket logoutRequestPacket)  {
 

@@ -1,6 +1,7 @@
 package com.lhuang.blog.chatroom.api.handler.server;
 
 import com.lhuang.blog.chatroom.api.util.LoginUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -10,12 +11,16 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2019/5/17
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class AuthHandler extends ChannelInboundHandlerAdapter {
 
+    public static final AuthHandler INSTANCE = new AuthHandler();
+
+    private AuthHandler() {
+    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
         if (!LoginUtil.hasLogin(ctx.channel())){
             ctx.channel().close();
             log.info("没有登录，关闭链接");
@@ -27,7 +32,6 @@ public class AuthHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
-
         if (LoginUtil.hasLogin(ctx.channel())) {
             System.out.println("当前连接登录验证完毕，无需再次验证, AuthHandler 被移除");
         } else {

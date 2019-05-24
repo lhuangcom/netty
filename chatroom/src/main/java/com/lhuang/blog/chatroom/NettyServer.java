@@ -32,25 +32,19 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) {
-                        nioSocketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,7,4));
-                        nioSocketChannel.pipeline().addLast(new PacketDecoder());
-                        nioSocketChannel.pipeline().addLast(new LoginRequestHandler());
-                        nioSocketChannel.pipeline().addLast(new AuthHandler());
-                        nioSocketChannel.pipeline().addLast(new MessageForwardHandler());
-                        nioSocketChannel.pipeline().addLast(new MessageRequestHandler());
-                        nioSocketChannel.pipeline().addLast(new CreateGroupRequestHandler());
-                        nioSocketChannel.pipeline().addLast(new LogoutRequestHandler());
-                        nioSocketChannel.pipeline().addLast(new ListGroupMembersRequestHandler());
-                        nioSocketChannel.pipeline().addLast(new JoinGroupRequestHandler());
-                        nioSocketChannel.pipeline().addLast(new QuitGroupRequestHandler());
-                        nioSocketChannel.pipeline().addLast(new PacketEncoder());
+                        nioSocketChannel.pipeline().addLast(new IMIdleStateHandler());
+                        nioSocketChannel.pipeline().addLast(new Spliter());
+                        nioSocketChannel.pipeline().addLast(PacketCodecHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(LoginRequestHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(AuthHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(IMHandler.INSTANCE);
                 }});
 
         bind(serverBootstrap,8000);
     }
 
     private static void bind(ServerBootstrap serverBootstrap, int hostPort){
-
         serverBootstrap.bind(hostPort).addListener((Future<? super Void> future) -> {
                 if (future.isSuccess()){
                     log.info(hostPort+" 端口绑定成功");

@@ -6,6 +6,7 @@ import com.lhuang.blog.chatroom.api.protocol.packet.request.MessageForwardPacket
 import com.lhuang.blog.chatroom.api.protocol.packet.response.MessageResponsePacket;
 import com.lhuang.blog.chatroom.api.util.SessionUtil;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,14 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2019/5/20
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class MessageForwardHandler extends SimpleChannelInboundHandler<MessageForwardPacket> {
+
+    public static final MessageForwardHandler INSTANCE = new MessageForwardHandler();
+
+    private MessageForwardHandler() {
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageForwardPacket messageForwardPacket) {
 

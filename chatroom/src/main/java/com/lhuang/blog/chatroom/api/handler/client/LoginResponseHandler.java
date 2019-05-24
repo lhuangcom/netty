@@ -2,6 +2,7 @@ package com.lhuang.blog.chatroom.api.handler.client;
 
 import com.lhuang.blog.chatroom.api.util.LoginUtil;
 import com.lhuang.blog.chatroom.api.protocol.packet.response.LoginResponsePacket;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,14 @@ import java.util.Date;
  * @since 2019/5/15
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginResponsePacket> {
+
+    public static final LoginResponseHandler INSTANCE = new LoginResponseHandler();
+
+    private LoginResponseHandler() {
+    }
+
     @Override
     public void channelActive(ChannelHandlerContext ctx)  {
         log.info(new Date()+": 客户端开始登录");
@@ -36,10 +44,10 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
         String userName = loginResponsePacket.getUsername();
 
         if (loginResponsePacket.isSuccess()) {
-           log.info("[" + userName + "]登录成功，userId 为: " + userId);
+            System.out.println("[" + userName + "]登录成功，userId 为: " + userId);
            LoginUtil.markLogin(channelHandlerContext.channel());
         } else {
-            log.info("[" + userName + "]登录失败，原因：" + loginResponsePacket.getReason());
+            System.out.println("[" + userName + "]登录失败，原因：" + loginResponsePacket.getReason());
         }
     }
 

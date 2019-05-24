@@ -19,7 +19,7 @@ public class LoginConsoleCommand implements ConsoleCommand{
 
         LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
         System.out.print("输入用户名登录: ");
-        String username = scanner.nextLine();
+        String username = scanner.next();
         loginRequestPacket.setUsername(username);
 
         // 密码使用默认的

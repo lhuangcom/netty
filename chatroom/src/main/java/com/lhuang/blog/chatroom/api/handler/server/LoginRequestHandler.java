@@ -6,6 +6,7 @@ import com.lhuang.blog.chatroom.api.util.LoginUtil;
 import com.lhuang.blog.chatroom.api.protocol.packet.request.LoginRequestPacket;
 import com.lhuang.blog.chatroom.api.protocol.packet.response.LoginResponsePacket;
 import com.lhuang.blog.chatroom.api.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,14 @@ import java.util.Date;
  * @since 2019/5/15
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
+
+    private LoginRequestHandler() {
+    }
+
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 

@@ -2,6 +2,7 @@ package com.lhuang.blog.chatroom.api.handler.client;
 
 import com.lhuang.blog.chatroom.api.protocol.packet.response.JoinGroupResponsePacket;
 import com.lhuang.blog.chatroom.api.protocol.packet.response.QuitGroupResponsePacket;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,14 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2019/5/23
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class QuitGroupResponseHandler extends SimpleChannelInboundHandler<QuitGroupResponsePacket> {
+
+    public static final QuitGroupResponseHandler INSTANCE = new QuitGroupResponseHandler();
+
+    private QuitGroupResponseHandler() {
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, QuitGroupResponsePacket quitGroupResponsePacket) throws Exception {
         if (quitGroupResponsePacket.getSuccess()){

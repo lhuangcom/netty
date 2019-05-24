@@ -4,6 +4,7 @@ import com.lhuang.blog.chatroom.api.command.LoginConsoleCommand;
 import com.lhuang.blog.chatroom.api.factory.ConsoleCommandManager;
 import com.lhuang.blog.chatroom.api.handler.*;
 import com.lhuang.blog.chatroom.api.handler.client.*;
+import com.lhuang.blog.chatroom.api.handler.server.IMIdleStateHandler;
 import com.lhuang.blog.chatroom.api.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -37,16 +38,20 @@ public class NettyClient {
                 .handler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) {
-                        nioSocketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,7,4));
-                        nioSocketChannel.pipeline().addLast(new PacketDecoder());
-                        nioSocketChannel.pipeline().addLast(new LoginResponseHandler());
-                        nioSocketChannel.pipeline().addLast(new MessageResponseHandler());
-                        nioSocketChannel.pipeline().addLast(new CreateGroupResponseHandler());
-                        nioSocketChannel.pipeline().addLast(new LogoutResponseHandler());
-                        nioSocketChannel.pipeline().addLast(new JoinGroupResponseHandler());
-                        nioSocketChannel.pipeline().addLast(new QuitGroupResponseHandler());
-                        nioSocketChannel.pipeline().addLast(new ListGroupMembersResponseHandler());
-                        nioSocketChannel.pipeline().addLast(new PacketEncoder());
+
+                        nioSocketChannel.pipeline().addLast(new IMIdleStateHandler());
+                        nioSocketChannel.pipeline().addLast(new Spliter());
+                        nioSocketChannel.pipeline().addLast(PacketCodecHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(LoginResponseHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(MessageResponseHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(CreateGroupResponseHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(LogoutResponseHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(JoinGroupResponseHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(QuitGroupResponseHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(ListGroupMembersResponseHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(GroupMessageResponseHandler.INSTANCE);
+                        // 心跳定时器
+                        nioSocketChannel.pipeline().addLast(new HeartBeatTimerHandler());
                     }
                 });
 
