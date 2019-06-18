@@ -1,7 +1,7 @@
-package com.lhuang.blog.chatroom.api.handler.client;
+package com.lhuang.netty.im.client.api.handler;
 
-import com.lhuang.blog.chatroom.api.util.LoginUtil;
-import com.lhuang.blog.chatroom.api.protocol.packet.response.LoginResponsePacket;
+import com.lhuang.netty.im.common.api.protocol.packet.response.LoginResponsePacket;
+import com.lhuang.netty.im.common.api.util.LoginUtil;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -22,7 +22,6 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
     private LoginResponseHandler() {
     }
 
-
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, LoginResponsePacket loginResponsePacket) {
         String userId = loginResponsePacket.getUserID();
@@ -37,7 +36,8 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) {
-       log.info("客户端连接被关闭!");
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        log.info("客户端连接被关闭!");
+        super.channelInactive(ctx);
     }
 }

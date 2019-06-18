@@ -32,6 +32,7 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) {
+                        nioSocketChannel.pipeline().addLast(new LifeCycleHandler());
                         nioSocketChannel.pipeline().addLast(new IMIdleStateHandler());
                         nioSocketChannel.pipeline().addLast(new Spliter());
                         nioSocketChannel.pipeline().addLast(PacketCodecHandler.INSTANCE);

@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: im-eureka
+
+server:
+  port: 9000
+
+eureka:
+  server:
+    enable-self-preservation: false
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://localhost:${server.port}/eureka/
+

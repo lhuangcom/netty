@@ -1,6 +1,6 @@
-package com.lhuang.blog.chatroom.api.handler.client;
+package com.lhuang.netty.im.client.api.handler;
 
-import com.lhuang.blog.chatroom.api.protocol.packet.response.JoinGroupResponsePacket;
+import com.lhuang.netty.im.common.api.protocol.packet.response.JoinGroupResponsePacket;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -26,11 +26,5 @@ public class JoinGroupResponseHandler extends SimpleChannelInboundHandler<JoinGr
 
         log.info("加入群组失败："+joinGroupResponsePacket.getReason());
 
-    }
-
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("加入群组激活");
-        super.channelActive(ctx);
     }
 }

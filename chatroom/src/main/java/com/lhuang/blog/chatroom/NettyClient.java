@@ -51,7 +51,9 @@ public class NettyClient {
                         nioSocketChannel.pipeline().addLast(ListGroupMembersResponseHandler.INSTANCE);
                         nioSocketChannel.pipeline().addLast(GroupMessageResponseHandler.INSTANCE);
                         // 心跳定时器
-                        nioSocketChannel.pipeline().addLast(new HeartBeatTimerHandler());
+                        nioSocketChannel.pipeline().addLast(HeartBeatTimerHandler.INSTANCE);
+                        //nioSocketChannel.pipeline().addLast(new LifeCycleHandler());
+
                     }
                 });
 
