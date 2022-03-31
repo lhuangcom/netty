@@ -24,7 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <im.common.version>0.0.1-SNAPSHOT</im.common.version>
-        <spring.boot.version>2.0.0.RELEASE</spring.boot.version>
+        <spring.boot.version>2.5.12</spring.boot.version>
         <admin.client.version>2.0.0</admin.client.version>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
 
